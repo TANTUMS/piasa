@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+      <report
+          id="report_cash_piasa"
+          model="account.voucher"
+          name="cash_report_piasa"
+          file="piasa_reporte_caja/report/report_cash_piasa.mako"
+          string="Reporte de Caja"
+          report_type="webkit"
+      />
+    	
+    	
+    </data>
+</openerp>
