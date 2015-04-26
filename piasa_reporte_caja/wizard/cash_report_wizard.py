@@ -30,16 +30,17 @@ class cash_report_wizard(osv.osv_memory):
     _name = 'cash.report.wizard'
     
     _columns = {
-                'start_date': fields.date("Initial date"),
-                'end_date': fields.date("Final date"),
+                'start_date': fields.date("Fecha"),
                 'sucursal': fields.many2one('account.journal', 'Sucursal')
                 }
-    _default= {
+    _defaults= {
                 'start_date' : lambda *a: datetime.date.today().strftime('%Y-%m-%d'),
-                'end_date': lambda *a: datetime.date.today().strftime('%Y-%m-%d'),
+                'sucursal': 23,
 
     }
-    
+
+
+
     def view_cash_report(self, cr, uid, ids, context):
         if context is None:
             context = {}
@@ -50,17 +51,17 @@ class cash_report_wizard(osv.osv_memory):
         user = user_pool.browse(cr, SUPERUSER_ID, uid)
         tz = pytz.timezone(user.partner_id.tz) or pytz.utc
         # get localized dates
-        fecha_final = pytz.utc.localize(datetime.datetime.strptime(str(data['end_date']) + ' 23:59:59', '%Y-%m-%d %H:%M:%S')).astimezone(tz)
+        fecha_final = pytz.utc.localize(datetime.datetime.strptime(str(data['start_date']) + ' 23:59:59', '%Y-%m-%d %H:%M:%S')).astimezone(tz)
         fecha = pytz.utc.localize(datetime.datetime.strptime(str(data['start_date'])+ ' 00:00:00', '%Y-%m-%d %H:%M:%S')).astimezone(tz)
 
         invoice_pool = self.pool.get('account.invoice')
         search_string = [('date_invoice', '>=', fecha),('date_invoice', '<=',fecha_final),('state', '!=','draft'),('journal_id','=',data['sucursal'][0])]
         invoice_ids = invoice_pool.search(cr, uid,search_string,order='number',context=context)
         context['start_date'] = data['start_date']
-        context['end_date'] = data['end_date']
+        # context['end_date'] = data['end_date']
         context['active_ids'] = invoice_ids
-        if data['start_date'] > data['end_date']:
-            raise osv.except_osv(_('Warning!'), _('Initial date  must be lesser than the Final date'))
+        # if data['start_date'] > data['end_date']:
+        #     raise osv.except_osv(_('Warning!'), _('Initial date  must be lesser than the Final date'))
         if not  invoice_ids:
             raise osv.except_osv(_('Warning!'), _('No such invoices for corresponding date'))
         
@@ -80,5 +81,15 @@ class cash_report_wizard(osv.osv_memory):
         
     
 cash_report_wizard()
+
+class account_invoice(osv.Model):
+    _name='account.invoice'
+    _inherit='account.invoice'
+
+    _columns = {
+        'notas_extra': fields.char('Notas'),
+    }
+
+account_invoice()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:-

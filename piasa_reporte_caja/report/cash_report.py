@@ -33,7 +33,7 @@ class cash_report_acc(report_sxw.rml_parse):
         self.localcontext.update({
             'time': time, 
             'start_date': context['start_date'],
-            'end_date': context['end_date'],
+            # 'end_date': context['end_date'],
             # 'user_name': u_name,
             'invoice_ids': context['active_ids'],
             'get_voucher_obj': self.get_voucher_obj,
@@ -85,13 +85,16 @@ class cash_report_acc(report_sxw.rml_parse):
         sum_credito=0.00
         tax_credito = 0.00
         total_credito= 0.00
+        facturas_credito_list=[]
         invoice_object = self.pool.get('account.invoice').browse(self.cr, self.uid,invoice_ids )
         for invoice_obj in invoice_object:
             if invoice_obj.partner_id.property_payment_term.id != 1:
                sum_credito += invoice_obj.amount_untaxed
                tax_credito += invoice_obj.amount_tax
                total_credito += invoice_obj.amount_total
-        return {'credito': sum_credito, 'tax_credito': tax_credito,'total_credito':total_credito}
+               facturas_credito_list.append(invoice_obj.id)
+        invoice_contado = self.pool.get('account.invoice').browse(self.cr,self.uid,facturas_credito_list)
+        return {'credito': sum_credito, 'tax_credito': tax_credito,'total_credito':total_credito,'facturas':invoice_contado}
     
 
     

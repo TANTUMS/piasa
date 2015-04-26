@@ -7,7 +7,7 @@
           model="account.voucher"
           name="cash_report_piasa"
           file="piasa_reporte_caja/report/report_cash_piasa.mako"
-          string="Reporte de Caja"
+          string="Corte de Facturas"
           report_type="webkit"
       />
     	

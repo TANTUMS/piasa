@@ -85,12 +85,12 @@
 									${formatLang(o.amount_tax, monetary=True)}
 								</font>
 							</td>
-							<td width="10%" align='center' style="font-size:.5px;">
+							<td width="10%" align='center' style="font-size:.2px;">
 								<font size="1">
 									${formatLang(o.amount_total, monetary=True)}
 								</font>
 							</td>
-							<td width="10%" align='center' style="font-size:.5px;">
+							<td width="10%" align='center' style="font-size:.2px;">
 								<font size="1">
 									${o.currency_id.name}
 								</font>
@@ -99,33 +99,51 @@
 					</tr>
 		</table>
 %endfor
-		<table width="100%"> 
+		<table width="100%" > 
 					<tr>
 						
 							<td width="10%"></td>
 							<td width="10%"></td>
 							<td width="39.96%"></td>
-							<td width="10%" align="center"><font size="1">${formatLang(get_total(invoice_ids)['sum_untaxed'],monetary=True)}</font></td>
-							<td width="10%" align="center"><font size="1">${formatLang(get_total(invoice_ids)['sum_tax'],monetary=True)}</font></td>
-							<td width="10%" align="center"><font size="1">${formatLang(get_total(invoice_ids)['sum_tot'],monetary=True)}</font></td>
+							<td width="10%" align="center"><font size="1"><b>${formatLang(get_total(invoice_ids)['sum_untaxed'],monetary=True)}</b></font></td>
+							<td width="10%" align="center"><font size="1"><b>${formatLang(get_total(invoice_ids)['sum_tax'],monetary=True)}</b></font></td>
+							<td width="10%" align="center"><font size="1"><b>${formatLang(get_total(invoice_ids)['sum_tot'],monetary=True)}</b></font></td>
 							<td width="10%"></td>
 						</font>
 					</tr>
 		</table>
 		
 		<table width="100%"> 
-
-				<tr>
-						<td rowspan="3">Facturas Contado:</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>
-							<tr>${formatLang(facturas_contado(invoice_ids)['contado'],monetary=True)}</tr>
-							<tr>${formatLang(facturas_contado(invoice_ids)['tax_contado'],monetary=True)}</tr>
-							<tr>${formatLang(facturas_contado(invoice_ids)['total_contado'],monetary=True)}</tr>
+			<div style="font-size:.2px;">
+				<tr width="100%">
+						<td width="15%"  ><font size="1">Facturas Contado:</font></td>
+						<td width="10%"  ><font size="1">${formatLang(facturas_contado(invoice_ids)['contado'],monetary=True)}</font><br>
+										 <font size="1"><ins>${formatLang(facturas_contado(invoice_ids)['tax_contado'],monetary=True)}</ins></font><br>
+							             <font size="1"><b>${formatLang(facturas_contado(invoice_ids)['total_contado'],monetary=True)}</b></font>
 						</td>
-					</tr>	
+						<td width="75%" align="center" ><b><ins>FACTURAS DE CREDITO</ins></b></td>
+				</tr>
+				<tr width="100%">
+						<td width="15%"  ><font size="1">Facturas Credito:</font></td>
+						<td width="10%"  ><font size="1">${formatLang(facturas_credito(invoice_ids)['credito'],monetary=True)}</font><br>
+										 <font size="1"><ins>${formatLang(facturas_credito(invoice_ids)['tax_credito'],monetary=True)}</ins></font><br>
+							             <font size="1"><b>${formatLang(facturas_credito(invoice_ids)['total_credito'],monetary=True)}</b></font>
+						</td>
+				
+						<td width="75%" align="left" ><font size="1">
+				% for l in 	facturas_credito(invoice_ids)['facturas']:
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						${l.number}
+						%if l.notas_extra: 
+									- ${l.notas_extra}
+						%endif
+						<br>
+				%endfor
+			     	</font></td>
+					
+				</tr>
+				    
+			</div>	
 		</table>
 <p style="page-break-before: always;"></p>
 </body>

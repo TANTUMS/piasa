@@ -6,22 +6,34 @@
     		<field name="name">cash.report.wizard</field>
             <field name="model">cash.report.wizard</field>
             <field name="arch" type="xml">
-            	<form string="Enter Dates" version="7.0">
+            	<form string="Introduce Fechas" version="7.0">
             		<group col="4">
             			<field name="start_date" required="1"/>
-            			<field name="end_date" required="1"/>
                         <field name="sucursal" required="1"/>
             		</group>
             		<footer>
-            			<button name="view_cash_report" type="object" string="View Report" class="oe_highlight"/>
+            			<button name="view_cash_report" type="object" string="Imprimir" class="oe_highlight"/>
             			<button special="cancel" string="Cerrar" class="oe_link"/>
             		</footer>
             	</form>
             </field>
     	</record>
     	
+
+         <record model="ir.ui.view" id="view_account_invoice_form_inherit">
+            <field name="name">account.invoice.form.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='move_id']" position="after">
+                        <field name="notas_extra"/>
+                </xpath>
+            </field>
+        </record>
+
+
     	<record id="cash_report_wizard_action" model="ir.actions.act_window">
-    		<field name="name">Cash Report</field>
+    		<field name="name">Corte de Facturas</field>
     		<field name="type">ir.actions.act_window</field>
             <field name="res_model">cash.report.wizard</field>
             <field name="view_type">form</field>
